@@ -1,3 +1,14 @@
+#include <Boards.h>
+#include <Firmata.h>
+#include <FirmataConstants.h>
+#include <FirmataDefines.h>
+#include <FirmataMarshaller.h>
+#include <FirmataParser.h>
+#include <SoftwareSerial.h>
+
+boolean debug = true;
+
+SoftwareSerial BTserial(2,3); // RX | TX
 
 int Motor1_1 = 6;      // Digital poot5
 int Motor1_2 = 5;      // Digital port6
@@ -38,7 +49,7 @@ void setup() {
   motor(0,0);
   while (analogRead(StopSensor) > TopSensorDrempelWaarde )
   {
-    Serial.println(analogRead(StopSensor));
+    if (debug) { Serial.println(analogRead(StopSensor)); }
   }
   delay(500);
 }
@@ -50,11 +61,11 @@ void loop() {
 
   //Serial.println(analogRead(StopSensor));
 
-  Serial.print("R:");
-  Serial.print(Afstand_rechts);
-  Serial.print(" L:");
-  Serial.println(Afstand_links);
-  Serial.println();
+  if (debug) {Serial.print("R:");}
+  if (debug) {Serial.print(Afstand_rechts);}
+  if (debug) {Serial.print(" L:");}
+  if (debug) {Serial.println(Afstand_links);}
+  if (debug) {Serial.println();}
   
   if (analogRead(StopSensor) > TopSensorDrempelWaarde )
   {
@@ -62,25 +73,25 @@ void loop() {
     {
       if ((Afstand_rechts < dempel) && (Afstand_links < dempel))
       {
-        Serial.println("rechtdoor");
+        if (debug) {Serial.println("rechtdoor");}
         motor(max_snelheid_rechts,max_snelheid_links);
       }
       if ((Afstand_rechts > dempel) && (Afstand_links > dempel))
       {
-        Serial.println("achteruit");
+        if (debug) {Serial.println("achteruit");}
         motor(-max_snelheid_rechts,-max_snelheid_links+100);
       }
       else
       {
         if ( Afstand_rechts > dempel)
         {
-          Serial.println("rechts");
+          if (debug) {Serial.println("rechts");}
           motor(max_snelheid_rechts,0);      
         }
 
         if ( Afstand_links > dempel)
         {
-          Serial.println("links");
+          if (debug) {Serial.println("links");}
           motor(0,max_snelheid_links);      
         }
       }
